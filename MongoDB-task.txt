@@ -1,0 +1,176 @@
+1.Create Operation:
+
+** create a new database named "library" and switch to it.**
+
+test> use library
+switched to db library
+
+library> db.createCollection("Books")
+{ ok: 1 }
+
+
+**Create a collection named "books" with fields: title, author, and published_year.**
+
+library> db.books.insert({title:"Atomic Habbits",author:"James Clear",published_year:2018})
+DeprecationWarning: Collection.insert() is deprecated. Use insertOne, insertMany, or bulkWrite.
+{
+  acknowledged: true,
+  insertedIds: { '0': ObjectId('66dc180d000530a9a22710bc') }
+}
+
+library> db.books.insertMany([{title:"The Power of Now",author:"Eckhart Tolle",published_year:1997},{title:"How to win friends and influence people",author:"Dale Carnegic",published_year:1936},{title:"Think and Grow Rich",author:"Napoleon Hill",published_year:1937}])
+{
+  acknowledged: true,
+  insertedIds: {
+    '0': ObjectId('66dc18e3000530a9a22710bd'),
+    '1': ObjectId('66dc18e3000530a9a22710be'),
+    '2': ObjectId('66dc18e3000530a9a22710bf')
+  }
+}
+
+2.Read Opeartion
+
+** Retrieve all documents from the "books" collection. **
+
+library> db.books.find()
+[
+  {
+    _id: ObjectId('66dc180d000530a9a22710bc'),
+    title: 'Atomic Habbits',
+    author: 'James Clear',
+    published_year: 2018
+  },
+  {
+    _id: ObjectId('66dc18e3000530a9a22710bd'),
+    title: 'The Power of Now',
+    author: 'Eckhart Tolle',
+    published_year: 1997
+  },
+  {
+    _id: ObjectId('66dc18e3000530a9a22710be'),
+    title: 'How to win friends and influence people',
+    author: 'Dale Carnegic',
+    published_year: 1936
+  },
+  {
+    _id: ObjectId('66dc18e3000530a9a22710bf'),
+    title: 'Think and Grow Rich',
+    author: 'Napoleon Hill',
+    published_year: 1937
+  }
+]
+
+
+**Find and display only the documents where the author is "Napoleon Hill".**
+
+library> db.books.find({author:"Napoleon Hill"})
+[
+  {
+    _id: ObjectId('66dc18e3000530a9a22710bf'),
+    title: 'Think and Grow Rich',
+    author: 'Napoleon Hill',
+    published_year: 1937
+  }
+]
+
+**Fetch and display the document with the earliest published year.** 
+
+library> db.books.find().sort({published_year:1}).limit(1)
+[
+  {
+    _id: ObjectId('66dc18e3000530a9a22710be'),
+    title: 'How to win friends and influence people',
+    author: 'Dale Carnegic',
+    published_year: 1936
+  }
+]
+
+
+3.**Update Operation:** 
+
+**Update the published year of the book with the title "Think and Grow Rich" to the current year. **
+
+library> db.books.update({title:"Think and Grow Rich"},{$set:{published_year:2024}})
+DeprecationWarning: Collection.update() is deprecated. Use updateOne, updateMany, or bulkWrite.
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 1,
+  modifiedCount: 1,
+  upsertedCount: 0
+}
+
+
+** Add a new field "genre" with the value "Self improvement" to all documents in the "books" collection. **
+
+library> db.books.update({},{$set:{genre:"Self improvement"}},{multi:true})
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 4,
+  modifiedCount: 4,
+  upsertedCount: 0
+}
+library> db.books.find()
+[
+  {
+    _id: ObjectId('66dc180d000530a9a22710bc'),
+    title: 'Atomic Habbits',
+    author: 'James Clear',
+    published_year: 2018,
+    genre: 'Self improvement'
+  },
+  {
+    _id: ObjectId('66dc18e3000530a9a22710bd'),
+    title: 'The Power of Now',
+    author: 'Eckhart Tolle',
+    published_year: 1997,
+    genre: 'Self improvement'
+  },
+  {
+    _id: ObjectId('66dc18e3000530a9a22710be'),
+    title: 'How to win friends and influence people',
+    author: 'Dale Carnegic',
+    published_year: 1936,
+    genre: 'Self improvement'
+  },
+  {
+    _id: ObjectId('66dc18e3000530a9a22710bf'),
+    title: 'Think and Grow Rich',
+    author: 'Napoleon Hill',
+    published_year: 2024,
+    genre: 'Self improvement'
+  }
+]
+
+
+4. Delete Operation:
+
+**Remove the document with the title "1997" from the "books" collection.**
+
+library> db.books.remove({title:"1997"})
+DeprecationWarning: Collection.remove() is deprecated. Use deleteOne, deleteMany, findOneAndDelete, or bulkWrite.
+{ acknowledged: true, deletedCount: 0 }
+
+** Delete all documents from the "books" collection where the published year is before 2000. **
+
+library> db.books.remove({published_year:{$lt:2000}})
+{ acknowledged: true, deletedCount: 2 }
+library> db.books.find()
+[
+  {
+    _id: ObjectId('66dc180d000530a9a22710bc'),
+    title: 'Atomic Habbits',
+    author: 'James Clear',
+    published_year: 2018,
+    genre: 'Self improvement'
+  },
+  {
+    _id: ObjectId('66dc18e3000530a9a22710bf'),
+    title: 'Think and Grow Rich',
+    author: 'Napoleon Hill',
+    published_year: 2024,
+    genre: 'Self improvement'
+  }
+]
+library>
