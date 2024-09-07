@@ -174,12 +174,10 @@ library> db.books.find()
   }
 ]
 
-5.**Advanced Query:**
+5.Advanced Query:
 
-//find and display top 3 recently
-published books from "Books"collection.
-library>db.Books.remove({published_
-year:-1}).limit(2)
+**find and display top 3 recently published books from "Books"collection.**
+library>db.Books.remove({published_year:-1}).limit(2)
 
-//Rettrive documents from the "Books" collection where the title contains word "MongoDB" or "NoSQL"
+**Rettrive documents from the "Books" collection where the title contains word "MongoDB" or "NoSQL"**
 library> db.Books.find({title: {$regex: /MongoBD|NoSQL/i }})
